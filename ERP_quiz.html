@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>ERP 測驗練習</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============= Theme Tokens ============= */
+  :root {
+    --bg: #f5efe2;
+    --bg-tex: #ede4d0;
+    --surface: #fdfaf2;
+    --ink: #1d1612;
+    --ink-2: #4a3f33;
+    --ink-3: #7d6f5e;
+    --line: #d6c8af;
+    --line-soft: #e6dcc4;
+    --accent: #2d5f3f;
+    --accent-bg: #d8e8d8;
+    --warn: #8b2828;
+    --warn-bg: #f3d8d4;
+    --amber: #b07c2a;
+    --amber-bg: #f1e3c1;
+    --shadow: 0 1px 0 rgba(45,30,15,.04), 0 8px 24px -12px rgba(45,30,15,.10);
+    --r: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1410;
+      --bg-tex: #221c16;
+      --surface: #251f18;
+      --ink: #f0e6d2;
+      --ink-2: #c8b89a;
+      --ink-3: #8a7a64;
+      --line: #3a3024;
+      --line-soft: #2e261d;
+      --accent: #6cc18b;
+      --accent-bg: #2a3f30;
+      --warn: #e58b8b;
+      --warn-bg: #4a2828;
+      --amber: #d9a85a;
+      --amber-bg: #3a2e1c;
+      --shadow: 0 1px 0 rgba(0,0,0,.2), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  body[data-theme="light"] {
+    --bg: #f5efe2; --bg-tex: #ede4d0; --surface: #fdfaf2; --ink: #1d1612; --ink-2: #4a3f33;
+    --ink-3: #7d6f5e; --line: #d6c8af; --line-soft: #e6dcc4; --accent: #2d5f3f; --accent-bg: #d8e8d8;
+    --warn: #8b2828; --warn-bg: #f3d8d4; --amber: #b07c2a; --amber-bg: #f1e3c1;
+    --shadow: 0 1px 0 rgba(45,30,15,.04), 0 8px 24px -12px rgba(45,30,15,.10);
+  }
+  body[data-theme="dark"] {
+    --bg: #1a1410; --bg-tex: #221c16; --surface: #251f18; --ink: #f0e6d2; --ink-2: #c8b89a;
+    --ink-3: #8a7a64; --line: #3a3024; --line-soft: #2e261d; --accent: #6cc18b; --accent-bg: #2a3f30;
+    --warn: #e58b8b; --warn-bg: #4a2828; --amber: #d9a85a; --amber-bg: #3a2e1c;
+    --shadow: 0 1px 0 rgba(0,0,0,.2), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 20% 10%, var(--bg-tex) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, var(--bg-tex) 0%, transparent 40%);
+    color: var(--ink);
+    font-family: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.7;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .num { font-family: "JetBrains Mono", ui-monospace, monospace; font-feature-settings: "tnum"; }
+  .serif { font-family: "Noto Serif TC", "Songti TC", "Source Han Serif TC", serif; }
+
+  /* ============= Layout ============= */
+  .app { max-width: 760px; margin: 0 auto; padding: 32px 24px 96px; min-height: 100vh; }
+  @media (max-width: 600px) {
+    .app { padding: 20px 16px 80px; }
+  }
+
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 28px; padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark {
+    width: 28px; height: 28px; border: 2px solid var(--ink);
+    background: var(--accent); position: relative;
+  }
+  .brand-mark::after {
+    content: ""; position: absolute; inset: -6px -6px auto auto;
+    width: 10px; height: 10px; background: var(--warn); border: 2px solid var(--ink);
+  }
+  .brand-name { font-family: "Noto Serif TC", serif; font-weight: 700; font-size: 18px; letter-spacing: 1px; }
+  .brand-sub { color: var(--ink-3); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-left: 4px; }
+  .theme-toggle {
+    background: transparent; border: 1px solid var(--line); color: var(--ink-2);
+    padding: 6px 12px; border-radius: var(--r); cursor: pointer; font-size: 13px;
+    font-family: inherit; transition: all .2s;
+  }
+  .theme-toggle:hover { background: var(--surface); color: var(--ink); }
+
+  /* ============= Home Screen ============= */
+  .home-hero {
+    margin: 24px 0 40px;
+  }
+  .home-eyebrow {
+    color: var(--accent); font-size: 13px; letter-spacing: 4px;
+    text-transform: uppercase; font-weight: 500; margin-bottom: 14px;
+  }
+  .home-title {
+    font-family: "Noto Serif TC", serif;
+    font-size: clamp(36px, 6vw, 56px); font-weight: 900; line-height: 1.15;
+    margin: 0 0 14px; letter-spacing: -1px;
+  }
+  .home-title em {
+    font-style: normal; color: var(--accent); position: relative;
+    background: linear-gradient(180deg, transparent 65%, var(--accent-bg) 65%);
+    padding: 0 4px;
+  }
+  .home-tag {
+    color: var(--ink-2); font-size: 16px; max-width: 540px;
+  }
+  .home-stats {
+    display: flex; gap: 28px; margin-top: 24px;
+    padding: 16px 20px; background: var(--surface);
+    border: 1px solid var(--line); border-radius: var(--r);
+  }
+  .stat-item { flex: 1; }
+  .stat-label { color: var(--ink-3); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
+  .stat-value { font-family: "Noto Serif TC", serif; font-size: 24px; font-weight: 700; margin-top: 2px; }
+
+  /* Mode cards */
+  .modes {
+    display: grid; gap: 12px; margin-top: 32px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .modes { grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  }
+  .mode-card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r); padding: 20px; cursor: pointer;
+    text-align: left; font-family: inherit; color: var(--ink);
+    transition: all .2s; box-shadow: var(--shadow);
+    display: flex; flex-direction: column; gap: 6px;
+    min-height: 130px;
+  }
+  .mode-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--ink-2);
+  }
+  .mode-card-num {
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    color: var(--ink-3); letter-spacing: 2px;
+  }
+  .mode-card-title {
+    font-family: "Noto Serif TC", serif; font-weight: 700; font-size: 20px;
+    margin: 4px 0 2px;
+  }
+  .mode-card-desc { color: var(--ink-3); font-size: 13px; line-height: 1.5; }
+
+  .home-section { margin-top: 40px; }
+  .section-title {
+    font-family: "Noto Serif TC", serif; font-weight: 700; font-size: 20px;
+    border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 16px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .section-title-aux { color: var(--ink-3); font-size: 12px; letter-spacing: 2px; font-family: "JetBrains Mono", monospace; }
+
+  /* History list */
+  .history-list { display: flex; flex-direction: column; gap: 1px; }
+  .history-item {
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: 14px; align-items: center;
+    padding: 12px 14px; background: var(--surface); border: 1px solid var(--line-soft);
+    font-size: 14px;
+  }
+  .history-item:not(:last-child) { border-bottom: none; }
+  .history-date { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-3); }
+  .history-mode { color: var(--ink-2); }
+  .history-score { font-family: "Noto Serif TC", serif; font-weight: 700; font-size: 16px; }
+  .history-score.good { color: var(--accent); }
+  .history-score.mid { color: var(--amber); }
+  .history-score.bad { color: var(--warn); }
+  .history-pct { color: var(--ink-3); font-family: "JetBrains Mono", monospace; font-size: 13px; }
+  .history-empty { color: var(--ink-3); padding: 24px; text-align: center; font-style: italic; border: 1px dashed var(--line); }
+  .history-clear {
+    background: transparent; border: none; color: var(--ink-3); font-size: 12px;
+    cursor: pointer; font-family: inherit; padding: 0;
+  }
+  .history-clear:hover { color: var(--warn); }
+
+  /* ============= Config Screen ============= */
+  .config-back {
+    background: transparent; border: none; color: var(--ink-3); font-family: inherit;
+    cursor: pointer; padding: 0; margin-bottom: 16px; font-size: 14px;
+  }
+  .config-back:hover { color: var(--ink); }
+  .config-title {
+    font-family: "Noto Serif TC", serif; font-weight: 900; font-size: 36px;
+    margin: 0 0 8px;
+  }
+  .config-desc { color: var(--ink-2); margin-bottom: 28px; }
+
+  .field { margin-bottom: 24px; }
+  .field-label {
+    font-weight: 500; margin-bottom: 8px; font-size: 14px;
+    color: var(--ink); display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .field-aux { font-size: 12px; color: var(--ink-3); font-family: "JetBrains Mono", monospace; }
+
+  .chapter-grid {
+    display: grid; gap: 8px; grid-template-columns: 1fr;
+  }
+  @media (min-width: 480px) { .chapter-grid { grid-template-columns: 1fr 1fr; } }
+  .chapter-chip {
+    border: 1px solid var(--line); background: var(--surface);
+    padding: 12px 14px; cursor: pointer; font-family: inherit; color: var(--ink);
+    border-radius: var(--r); display: flex; justify-content: space-between; align-items: center;
+    text-align: left; transition: all .15s;
+  }
+  .chapter-chip:hover { border-color: var(--ink-3); }
+  .chapter-chip.active {
+    background: var(--accent-bg); border-color: var(--accent); color: var(--ink);
+  }
+  .chapter-chip-name { font-family: "Noto Serif TC", serif; font-weight: 500; font-size: 15px; }
+  .chapter-chip-count { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--ink-3); }
+  .chapter-chip.active .chapter-chip-count { color: var(--accent); }
+
+  .num-input {
+    background: var(--surface); border: 1px solid var(--line); padding: 10px 14px;
+    border-radius: var(--r); color: var(--ink); font-family: "JetBrains Mono", monospace;
+    font-size: 16px; width: 120px;
+  }
+  .num-input:focus { outline: none; border-color: var(--accent); }
+
+  .toggle-row { display: flex; gap: 16px; flex-wrap: wrap; }
+  .toggle {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    padding: 8px 14px; cursor: pointer; font-family: inherit;
+    border-radius: 99px; font-size: 13px;
+  }
+  .toggle.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  /* ============= Quiz Screen ============= */
+  .progress-wrap { margin-bottom: 28px; }
+  .progress-meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    color: var(--ink-3); font-size: 13px; margin-bottom: 8px; font-family: "JetBrains Mono", monospace;
+  }
+  .progress-bar {
+    height: 3px; background: var(--line-soft); border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill { height: 100%; background: var(--accent); transition: width .3s; }
+
+  .qcard {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r); padding: 28px; box-shadow: var(--shadow);
+  }
+  @media (max-width: 480px) { .qcard { padding: 22px 18px; } }
+
+  .qmeta { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+  .qmeta-tag {
+    font-size: 11px; letter-spacing: 1px; padding: 3px 8px;
+    border: 1px solid var(--line); border-radius: 99px; color: var(--ink-3);
+    font-family: "JetBrains Mono", monospace;
+  }
+  .qmeta-tag.multi { color: var(--amber); border-color: var(--amber); }
+
+  .qtext {
+    font-family: "Noto Serif TC", serif; font-weight: 500; font-size: 19px;
+    line-height: 1.7; color: var(--ink); margin: 0 0 24px;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    border: 1px solid var(--line); background: var(--bg);
+    border-radius: var(--r); padding: 14px 16px; cursor: pointer;
+    display: flex; gap: 14px; align-items: flex-start;
+    font-family: inherit; color: var(--ink); text-align: left;
+    transition: all .15s; line-height: 1.6;
+  }
+  .opt:hover:not([disabled]) { border-color: var(--ink-3); background: var(--surface); }
+  .opt[disabled] { cursor: default; }
+  .opt-letter {
+    font-family: "JetBrains Mono", monospace; font-weight: 500; font-size: 13px;
+    color: var(--ink-3); padding-top: 1px; flex-shrink: 0; width: 18px;
+  }
+  .opt-text { flex: 1; }
+  .opt-icon { width: 18px; flex-shrink: 0; padding-top: 2px; color: var(--ink-3); font-size: 14px; }
+  .opt.selected { border-color: var(--ink-2); background: var(--surface); }
+  .opt.selected .opt-letter, .opt.selected .opt-icon { color: var(--ink); font-weight: 700; }
+
+  .opt.correct {
+    border-color: var(--accent); background: var(--accent-bg);
+  }
+  .opt.correct .opt-letter, .opt.correct .opt-icon { color: var(--accent); font-weight: 700; }
+  .opt.wrong {
+    border-color: var(--warn); background: var(--warn-bg);
+  }
+  .opt.wrong .opt-letter, .opt.wrong .opt-icon { color: var(--warn); font-weight: 700; }
+  .opt.correct-missed {
+    border-color: var(--accent); border-style: dashed; background: transparent;
+  }
+  .opt.correct-missed .opt-letter, .opt.correct-missed .opt-icon { color: var(--accent); }
+
+  .feedback {
+    margin-top: 18px; padding: 12px 16px; border-radius: var(--r);
+    font-size: 14px; line-height: 1.6;
+  }
+  .feedback.right { background: var(--accent-bg); color: var(--accent); border-left: 3px solid var(--accent); }
+  .feedback.wrong { background: var(--warn-bg); color: var(--warn); border-left: 3px solid var(--warn); }
+  .feedback strong { font-family: "Noto Serif TC", serif; font-weight: 700; }
+
+  .qactions {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 24px;
+  }
+  .qactions-left { color: var(--ink-3); font-size: 13px; }
+
+  /* Buttons */
+  .btn {
+    background: var(--ink); color: var(--bg); border: 1px solid var(--ink);
+    padding: 10px 22px; border-radius: var(--r); cursor: pointer;
+    font-family: inherit; font-weight: 500; font-size: 14px;
+    letter-spacing: 1px; transition: all .15s;
+  }
+  .btn:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); }
+  .btn:disabled { opacity: .35; cursor: not-allowed; }
+  .btn-ghost {
+    background: transparent; color: var(--ink); border: 1px solid var(--line);
+  }
+  .btn-ghost:hover:not(:disabled) { background: var(--surface); border-color: var(--ink-2); }
+  .btn-warn {
+    background: transparent; color: var(--warn); border: 1px solid var(--warn);
+  }
+  .btn-warn:hover:not(:disabled) { background: var(--warn); color: var(--bg); }
+  .btn-block { width: 100%; padding: 14px; font-size: 15px; }
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* ============= Result Screen ============= */
+  .result-hero {
+    text-align: center; padding: 40px 0 32px;
+    border-bottom: 1px solid var(--line); margin-bottom: 32px;
+  }
+  .result-eyebrow {
+    color: var(--ink-3); font-size: 12px; letter-spacing: 4px; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .result-score {
+    font-family: "Noto Serif TC", serif; font-size: 96px; font-weight: 900;
+    line-height: 1; margin: 8px 0;
+    background: linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  @media (max-width: 480px) { .result-score { font-size: 72px; } }
+  .result-score.good { background: linear-gradient(180deg, var(--accent) 0%, var(--ink-2) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .result-fraction {
+    font-family: "JetBrains Mono", monospace; color: var(--ink-3); font-size: 14px;
+    margin-top: 4px;
+  }
+  .result-meta {
+    display: flex; justify-content: center; gap: 32px; margin-top: 16px; flex-wrap: wrap;
+  }
+  .result-meta-item { text-align: center; }
+  .result-meta-label { color: var(--ink-3); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
+  .result-meta-value { font-family: "Noto Serif TC", serif; font-weight: 700; font-size: 18px; margin-top: 2px; }
+
+  /* Wrong review */
+  .review-section { margin-top: 32px; }
+  .review-item {
+    background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--warn);
+    padding: 18px 20px; border-radius: var(--r); margin-bottom: 12px;
+  }
+  .review-meta {
+    display: flex; gap: 12px; align-items: center; margin-bottom: 8px;
+    font-size: 11px; color: var(--ink-3); font-family: "JetBrains Mono", monospace;
+    letter-spacing: 1px;
+  }
+  .review-q {
+    font-family: "Noto Serif TC", serif; font-weight: 500; font-size: 16px;
+    margin-bottom: 14px; line-height: 1.6;
+  }
+  .review-row { display: flex; gap: 8px; align-items: flex-start; margin: 4px 0; font-size: 14px; line-height: 1.6; }
+  .review-row-label {
+    flex-shrink: 0; font-family: "JetBrains Mono", monospace; font-size: 11px;
+    letter-spacing: 1px; color: var(--ink-3); padding-top: 2px; min-width: 60px;
+  }
+  .review-row-value { flex: 1; }
+  .review-row.user .review-row-value { color: var(--warn); }
+  .review-row.right .review-row-value { color: var(--accent); font-weight: 500; }
+
+  /* Misc */
+  .ftn { color: var(--ink-3); font-size: 12px; text-align: center; margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line-soft); }
+  .ftn a { color: var(--ink-2); }
+  .hidden { display: none !important; }
+  .fade-in { animation: fadeIn .35s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div>
+        <div class="brand-name">ERP 練習場</div>
+        <div class="brand-sub">study console</div>
+      </div>
+    </div>
+    <button class="theme-toggle" id="themeToggle">切換主題</button>
+  </header>
+  <main id="main"></main>
+  <div class="ftn">本地檔 · 不上傳任何資料 · 紀錄存於瀏覽器</div>
+</div>
+
+<script>
+const QUESTIONS = [{"num": 1, "text": "下列何者非執行物料需求規劃（MRP）的主要依據？", "type": "single", "options": ["生產排程", "物料庫存", "主生產計劃（MPS）", "物料表（BOM）"], "correct": [0], "source": "doc1"}, {"num": 2, "text": "封閉迴路物料需求規劃（Closed-loop MRP）在物料需求規劃 MRP 基礎上加入考量下列何者，以檢視排程的合理性？", "type": "single", "options": ["庫存需求規畫（Inventory Requirement Planning）", "生產規畫（Production Planning）", "產能需求規畫（Capacity Requirement Planning）", "採購需求規畫（Procurement Requirement Planning）"], "correct": [2], "source": "doc1"}, {"num": 3, "text": "關於 ERP 系統應用三層式架構的對應說明，下列哪些正確？(複選)", "type": "multi", "options": ["銷售人員確認後的訂單儲存於訂單資料架構中，此訂單架構屬於資料層（Data Tier）", "生產線測試人員透過工作機檯或工業用電腦輸入檢測作業項目，此種輸入表單視為展示層（Presentation Tier）", "庫存人員透過查詢功能檢查到安全存量相關數據，其中計算安全存量的相關運算機制通常放置於商業層（Business Tier）／應用層（Application Tier）", "業務人員透過手機查詢客戶資料，其中手機觸控運作，係屬於商業層（Business Tier）／應用層（Application Tier）"], "correct": [0, 1, 2], "source": "doc1"}, {"num": 4, "text": "ERP 系統的整合特性包含了下列哪些？(複選)", "type": "multi", "options": ["資料的整合", "資料與流程的整合", "客戶與供應商的整合", "金流與物流的整合"], "correct": [0, 1], "source": "doc1"}, {"num": 5, "text": "美國營運管理協會 APICS 對 ERP 下了明確定義，它跟傳統 MRPII 有一些不同點，以下何者不屬之？", "type": "single", "options": ["關聯式資料庫", "點對點架構", "第四代語言", "主從架構"], "correct": [1], "source": "doc1"}, {"num": 6, "text": "誠如「資訊孤島」所言，各部門自體的管理資訊系統（Management Information System， MIS）極致發展下，反而不盡然對公司的整體利益更有助力。而在 ERP 整合規劃的思考下，卻較能實現公司的最大利益。這是因為重視資源規劃的 ERP 較分而治之的 MIS 更能提供以下何種特質，使企業利益得以實現？", "type": "single", "options": ["資訊的分享", "流程的統一", "資料的整合", "組織的強化"], "correct": [0], "source": "doc1"}, {"num": 7, "text": "對 ERP 系統採用的基本技術而言，目前的主流趨勢是下列哪一種架構居多？", "type": "single", "options": ["雲端計算架構", "集中式架構", "分散式架構", "多層式主從架構"], "correct": [3], "source": "doc1"}, {"num": 8, "text": "一個具有即時與整合特性的 ERP 系統，至少能滿足在特定情境設定之下的流程，下列幾項作業流程順序何者正確？", "type": "single", "options": ["接單 → 排程 → 採購 → 驗收 → 付款 → 發料 → 製造 → 出貨", "接單 → 採購 → 排程 → 驗收 → 付款 → 發料 → 製造 → 出貨", "接單 → 採購 → 排程 → 驗收 → 付款 → 製造 → 發料 → 出貨", "接單 → 排程 → 採購 → 驗收 → 付款 → 製造 → 發料 → 出貨"], "correct": [0], "source": "doc1"}, {"num": 9, "text": "下列有關 ERP 系統的最佳化實務（Best Practice）對企業所產生的效益，何者是正確的？", "type": "single", "options": ["降低存貨周轉率", "增加人力的成本", "增加時程、提高品質", "因為資訊的整合，可縮短決策所需要的時間"], "correct": [3], "source": "doc1"}, {"num": 10, "text": "有關 ERP 系統的演進，下列何者正確？", "type": "single", "options": ["EERP --> MRPII --> MRP --> ERP", "MRP --> MRPII --> ERP --> EERP", "MRPII --> MRP --> EERP --> ERP", "ERP --> MRPII --> MRP --> EERP"], "correct": [1], "source": "doc1"}, {"num": 11, "text": "下列哪一種 ERP 系統發展的演進歷程是正確的？", "type": "single", "options": ["ERP → EERP（Extended ERP）→ MRP I → MRP II", "MRP I → MRP II → ERP → EERP", "MRP II → ERP → MRP I → EERP", "MRP I → ERP → MRP II → EERP"], "correct": [1], "source": "doc1"}, {"num": 12, "text": "物料需求規劃（Material Requirements Planning， MRP）主要是由四個基本功能所組成，下列何者不屬於 MRP 的基本功能？", "type": "single", "options": ["工單管理（Work order）", "物料清單展開（Bill of material processing explosion）", "即時管理系統（Just In Time， JIT）", "經濟訂購量（Economic Order Quantity， EOQ）"], "correct": [2], "source": "doc1"}, {"num": 13, "text": "一般而言，可將導入 ERP 系統的效益分為有形與無形效益兩方面，下列何者不包括在 ERP 系統所帶來的有形效益內？", "type": "single", "options": ["增加營業收入與利潤", "企業流程與系統作業之整合性", "降低採購成本", "增加交貨準確率"], "correct": [1], "source": "doc1"}, {"num": 14, "text": "ERP 系統使用者企業與 ERP 顧問在資訊與知識上的不對稱，經常成為導入 ERP 系統的重大障礙。下列何者是 ERP 系統失敗的原因之一？", "type": "single", "options": ["高階主管的支持", "使用者的配合度高", "稱職的建置顧問", "企業人事流動率高"], "correct": [3], "source": "doc1"}, {"num": 15, "text": "關於 ERP 系統功能架構，以下敘述哪些正確？(複選)", "type": "multi", "options": ["網路伺服器提供使用者透過瀏覽器存取 ERP 系統資料", "即使有了雲端系統架構，ERP 系統目前仍僅能利用軟體的遠端方式操控，且企業內一定得安裝相關伺服器", "資料庫伺服器通常儲存企業營運相關的資料", "應用程式伺服器為 ERP 系統模組安裝之處，但無法擴充數目以分擔負荷量"], "correct": [0, 2], "source": "doc1"}, {"num": 16, "text": "下列哪些是導入 ERP 系統的效益？(複選)", "type": "multi", "options": ["增加營業收入與利潤", "提升資金的週轉率", "增加交貨準確率", "加強整合系統，減少增加 IT 花費"], "correct": [0, 1, 2], "source": "doc1"}, {"num": 17, "text": "根據台灣區 249 家導入 ERP 的企業分析結果（2004，中華企業資源規劃協會，台灣地區企業導入 ERP 系統管理議題之實證調查），導入 ERP 系統時可能遇到的問題很多，下列何者為最多企業可能面臨到的問題？", "type": "single", "options": ["供應商技術能力不足", "落後專案所規劃的進度", "使用單位未能明確說明其需求", "顧問不了解公司業務程序"], "correct": [2], "source": "doc1"}, {"num": 18, "text": "目前 ERP 系統除提供基本的作業模組功能外，也提供其他主要延伸功能來和 ERP 搭配，期望可以提升更高的附加價值給予企業主，請問下列何者非其主要的延伸功能之一？", "type": "single", "options": ["數位學習（e-Learning）", "供應鏈管理（SCM）", "顧客關係管理（CRM）", "電子商務（EC）"], "correct": [0], "source": "doc1"}, {"num": 19, "text": "根據美國作業管理學會（APICS）的定義：一個會計導向的資訊系統，用來規劃和確認為了接受、製造、運送和結算客戶訂單所需的整個企業資源，稱為下列何者？", "type": "single", "options": ["物料需求規劃（MRP）", "製造資源規劃（MRP II）", "企業資源規劃（ERP）", "企業系統規劃（BSP）"], "correct": [2], "source": "doc1"}, {"num": 20, "text": "下列哪些為 ERP 系統的主要效益？(複選)", "type": "multi", "options": ["企業流程自動化", "即時存取管理資訊", "協助改變產品結構", "使用電子通訊及電子商務改進供應鍵管理"], "correct": [0, 1, 3], "source": "doc1"}, {"num": 21, "text": "下列哪些是 ERP 系統供應商？(複選)", "type": "multi", "options": ["SAP", "Oracle", "鼎新", "漢康"], "correct": [0, 1, 2, 3], "source": "doc1"}, {"num": 22, "text": "關於 ERP 導入常見失敗因素，下列何者不正確？", "type": "single", "options": ["高階主管不支持，專案人員以及使用者教育訓練不足", "顧問專業能力不足，顧問公司經驗不足", "流程考量過於嚴謹，系統導入時須就管理面與使用面互做確認乃至於耗時甚鉅", "企業需求分析不完善，使用者抗拒"], "correct": [2], "source": "doc1"}, {"num": 23, "text": "大多數的文獻都從下列何者作為 ERP 發展的源頭，但實際上 ERP 系統整合了企業管理的五大功能並且形成一個企業的整體資訊系統？", "type": "single", "options": ["物料需求規劃（MRP）", "製造資源規劃（MRP II）", "管理資訊系統（MIS）", "企業系統規劃（BSP）"], "correct": [0], "source": "doc1"}, {"num": 24, "text": "APICS 定義 ERP 是何種導向的資訊系統？", "type": "single", "options": ["功能", "部門", "財務會計", "技術"], "correct": [2], "source": "doc1"}, {"num": 25, "text": "關於 ERP 發展的各個階段與其使用到的資訊架構與技術，下列何者有誤？", "type": "single", "options": ["第三代 ERP 常用到主從式（Client／Server）架構，及常使用第四代程式語言來撰寫相關程式", "第三代 ERP 重視組織間的協調，力求企業的最佳化實務，以極力主張使用 XML 化物件導向資料庫取代常見的關聯式資料庫", "ERP II 重視 Internet 的運用，Web-based 的相關設計亦是使用的重點之一", "ERP II 同樣重視企業間的協同合作，3-Tier 的架構與 Web Services 的混搭自然也在使用之列"], "correct": [1], "source": "doc1"}, {"num": 26, "text": "從 1970 年代到 21 世紀，ERP 的演化歷程大致可以分為四個階段，請問下列哪一階段是在於將市場的需求重點轉為滿足顧客多樣化的個別需求，創造高附加價值的大量客製化的生產方式？", "type": "single", "options": ["1970 ~ 1980（MRP）", "1980 ~ 1990（MRPII）", "1990 ~ 2000（ERP）", "2000 ~（EERP）"], "correct": [2], "source": "doc1"}, {"num": 27, "text": "ERP 系統專案實施的風險程度定義為改變或不確定造成累積的影響及影響專案成功或使其未達成目標的潛在事件，請問下列哪一項風險程度類別會影響公司競爭力與獲利？", "type": "single", "options": ["使用者的參與度不足", "高階主管的支持度不佳", "資訊系統造成公司營運衝擊", "整體企業策略使用技術過於集中"], "correct": [3], "source": "doc1"}, {"num": 28, "text": "從 ERP 系統功能完整性的角度來看，一個 ERP 產品至少應該將企業整個產銷循環包含在內，其中從訂單、採購、存貨、出貨到收款等產銷循環為下列何種產業？", "type": "single", "options": ["買賣業", "服務業", "製造業", "物流業"], "correct": [0], "source": "doc1"}, {"num": 29, "text": "ERP 與企業最主要的績效目標：增加企業利潤的關係為下列何者？", "type": "single", "options": ["導入 ERP 系統就可以幫助企業增加利潤", "導入 ERP 系統無法幫助企業增加利潤", "可以經由 ERP 來提升營運作業效率提升企業競爭力，以滿足客戶超越競爭者而增加獲利能力", "導入 ERP 和企業利潤無關"], "correct": [2], "source": "doc1"}, {"num": 30, "text": "ERP 系統主要功能為將企業營運中各流程中所需的資料即時整合並匯入何模組中？", "type": "single", "options": ["銷售模組", "會計模組", "製造模組", "庫存模組"], "correct": [1], "source": "doc1"}, {"num": 31, "text": "ERP 系統成功關鍵要素脫離不了人，下列哪些人會影響到 ERP 統導入的成敗？(複選)", "type": "multi", "options": ["高階主管", "建置顧問", "使用者", "專案主持人"], "correct": [0, 1, 2, 3], "source": "doc1"}, {"num": 32, "text": "Callaway（1999）曾提出導入 ERP 系統具有有形與無形效益，下列何者不是無形效益？", "type": "single", "options": ["即時提供管理決策資訊", "提升生產力", "資訊收集的正確性與完整性", "企業流程與系統作業的整合性"], "correct": [1], "source": "doc1"}, {"num": 33, "text": "對於 ERP 系統常用的架構層次，下列描述哪些正確？(複選)", "type": "multi", "options": ["在連接底層考慮使用 VPN（Virtual Private Network），可以保障公司經營團隊與董事會間財務資料以及內部一些商業機密資料較不會被網路監聽與剽竊", "使用的作業系統上比較重視初始建置時成本，日後持有或維護等成本則視為公司每年攤列開銷，不應當作 ERP 決策時考量因素", "在應用開發語言與使用資料庫上，主要是以配合公司舊有MIS 環境與應用軟體系統為考量，以便在 ERP 導入與整合後能與之前運作保持一致性", "針對辦公室流程使用 workflow 架構取代 e-mail 來做訊息傳遞，最主要是前者有較佳的傳遞確認性與保證"], "correct": [0, 3], "source": "doc1"}, {"num": 34, "text": "關於 Shang & Seddon 2000 年提出區分 ERP 效益的架構，可分成五大面向及其二十一項效益，下列何者敘述有誤？", "type": "single", "options": ["改善決策制定與涵蓋更完善之資源管理屬於管理面的效益提升", "促進企業學習、建立共同願景屬於組織面的效益提升", "促進產品差異化／客製化、建立成本領導屬於策略面的效益提升", "降低成本、延長存貨周轉時間與銷貨反應時間屬於營運面的效益提升"], "correct": [3], "source": "doc1"}, {"num": 35, "text": "現今流行的多層式（Multi-Tier）架構是建立在何種基礎之上？", "type": "single", "options": ["網頁基礎（Web Based）", "集中式架構（Central Computer）", "大型主機架構（Mainframe）", "主從式架構（Client/Server）"], "correct": [3], "source": "doc1"}, {"num": 36, "text": "下列何者是 ERP 系統導入失敗的可能原因？", "type": "single", "options": ["ERP 是一套資訊系統，故導入時不需考量公司整體策略，由資訊部門主導即可", "高階主管的全力支持", "各部門關鍵使用者積極的參與", "良好的變革管理"], "correct": [0], "source": "doc1"}, {"num": 37, "text": "依 APICS（1995）為企業資源規劃系統提出的定義，是以下列何者為導向之資訊系統？", "type": "single", "options": ["管理會計導向的系統", "財務會計導向的系統", "生產規劃導向的系統", "生產控制導向的系統"], "correct": [1], "source": "doc1"}, {"num": 38, "text": "下列哪些是 ERP 系統的特性？(複選)", "type": "multi", "options": ["即時", "整合", "採取多層式主從（client-server）架構", "多模組的資訊系統"], "correct": [0, 1, 2, 3], "source": "doc1"}, {"num": 1, "text": "基本上，一個典型的 ERP 系統導入案會經過附圖七個階段，請依照其正確順序排列之？（請參閱附圖作答）", "type": "single", "options": ["(1) → (4) → (3) → (5) → (2) → (6) → (7)", "(1) → (4) → (5) → (3) → (6) → (2) → (7)", "(1) → (4) → (2) → (3) → (5) → (6) → (7)", "(1) → (4) → (2) → (3) → (6) → (5) → (7)"], "correct": [1], "source": "doc2"}, {"num": 2, "text": "ERP 系統的導入策略可以分為三種：逐步式（Step by Step）、大躍進式（Big-Bang）和複製式（Roll-Out），其中對組織資源協調與控制較有利的方法為下列何者？", "type": "single", "options": ["逐步式（Step by Step）", "大躍進式（Big-Bang）", "複製式（Roll-Out）", "三者都可以"], "correct": [0], "source": "doc2"}, {"num": 3, "text": "諸多國際組織在 XML 基礎上，投入大量資源以研訂全球各產業之共通電子商務應用標準規範及對應的應用領域，下列何者正確？", "type": "single", "options": ["ebXML 之於線上學習", "RosettaNet 之於網路業者", "IFX（Interactive Financial eXchange）之於運輸業", "HL7 （Health Level Seven）之於醫療業"], "correct": [3], "source": "doc2"}, {"num": 4, "text": "下列哪些屬於 ERP 導入專案規劃階段的工作？(複選)", "type": "multi", "options": ["訂定專案範圍", "組織專案團隊", "評估顧問公司", "訓練種子人員"], "correct": [0, 3], "source": "doc2"}, {"num": 5, "text": "下列何者不是大多數企業避免進行 ERP 客製化的主要原因？", "type": "single", "options": ["與原系統整合性問題", "會增加風險管理上的不便", "會增加系統導入成本或軟體安裝成本", "必須額外耗費精神或人力維護客製化的系統"], "correct": [1], "source": "doc2"}, {"num": 6, "text": "ERP 系統的導入策略可以分為三種：逐步式（Step by Step）、大躍進式（Big-Bang）和複製式（Roll-Out），其中所需時程較短的為下列何者？", "type": "single", "options": ["逐步式（Step by Step）", "大躍進式（Big-Bang）", "複製式（Roll-Out）", "三者都可以"], "correct": [1], "source": "doc2"}, {"num": 7, "text": "關於 ERP 系統建置後的售後服務，應包含以下哪些？(複選)", "type": "multi", "options": ["問題分析與解決", "新增修補程式（Patch）", "使用者社群（User's club）", "員工的持續教育訓練"], "correct": [0, 1, 2, 3], "source": "doc2"}, {"num": 8, "text": "關於 ERP 系統建置的敘述，下列何者錯誤？", "type": "single", "options": ["指將 ERP 安裝在硬體設備上，並且依企業的作業流程啟動模組、設定參數、建立基本資料以備系統運作的工作", "大多是在顧問公司的輔導下來進行的", "當建置合約簽定後，即可開始系統建置的過程", "是將使用者需求轉化為系統規格文件，以作為上一階段系統實作的依據"], "correct": [3], "source": "doc2"}, {"num": 9, "text": "下列哪些為企業導入 ERP 系統的可能原因？(複選)", "type": "multi", "options": ["改善資訊的正確性與及時性", "有助於公司的上市上櫃", "同業已導入類似系統", "進行企業再造流程"], "correct": [0, 1, 2, 3], "source": "doc2"}, {"num": 10, "text": "專案控管週期的順序為下列何者？（1）訂定目標（2）離差測量（3）檢討與修正（4）學習提升", "type": "single", "options": ["（1）→（2）→（3）→（4）", "（1）→（3）→（2）→（4）", "（1）→（4）→（2）→（3）", "（4）→（1）→（2）→（3）"], "correct": [0], "source": "doc2"}, {"num": 11, "text": "ERP 系統建置顧問評選時，最主要考慮的有哪些方面？（請參閱附圖作答）", "type": "single", "options": ["12", "134", "234", "1234"], "correct": [1], "source": "doc2"}, {"num": 12, "text": "ERP 系統的導入策略可以分為三種：逐步式（Step by Step）、大躍進式（Big-Bang）和複製式（Roll-Out），其中在短時間內需要投入較龐大資源的是下列何者？", "type": "single", "options": ["逐步式（Step by Step）", "大躍進式（Big-Bang）", "複製式（Roll-Out）", "三者都可以"], "correct": [1], "source": "doc2"}, {"num": 13, "text": "基本上專案管理流程可大致歸納為附圖的八大步驟，請依正確流程順序排列之？（請參閱附圖作答）", "type": "single", "options": ["(3)(7)(1)(8)(4)(6)(5)(2)", "(1)(7)(3)(8)(4)(6)(5)(2)", "(3)(7)(1)(4)(8)(5)(6)(2)", "(1)(7)(3)(8)(6)(4)(5)(2)"], "correct": [0], "source": "doc2"}, {"num": 14, "text": "隨著資訊系統委外市場快速成長，委外服務也細分成很多種，下列敘述何者較正確？", "type": "single", "options": ["合包（Co-sourcing）是一種長期合作關係，雙方先為此關係進行投資，再依據預先擬定的協議分享利益", "內包（Insourcing）是一種短期的策略性解決方案，原因在於解決迫切的問題，但與企業規劃前景的策略發展過程無關", "利益關係（Benefit-based relationships）為一種確保產值的應變措施，藉由改善某區域的營運，以承攬來自其他部門的工作", "服務外包（Outsourcing the service）是一種仔細選擇和約僱專業的外部服務供應商，並在必要時，因應服務供應商的專業累積，創新擴大服務層面"], "correct": [3], "source": "doc2"}, {"num": 15, "text": "在評選 ERP 系統供應商時，必須考慮幾點因素，以下何者不是須考慮因素？", "type": "single", "options": ["組織與人員", "方法或程序", "內容和標準", "品牌知名度"], "correct": [3], "source": "doc2"}, {"num": 16, "text": "滾動式導入（Roll-out）是一個部門一個部門或是一個區域一個區域（Site by site）的導入，最後再推展到全公司。部門／區域的導入可以是全面性，也可以是逐步導入，因此其導入速度較慢；請問下列哪些為滾動式導入的優點？(複選)", "type": "multi", "options": ["成本較易控制", "累積一個完整的導入經驗將有助於後續的推展", "風險較低", "專案成員的激勵動機最大"], "correct": [0, 1, 2], "source": "doc2"}, {"num": 17, "text": "ERP 的導入過程，專案小組扮演著一個舉足輕重的角色。此專案小組的建立，應該在下列哪個時期為之？", "type": "single", "options": ["初始評估期", "專案準備期", "系統上線規劃期", "企業藍圖規劃期"], "correct": [1], "source": "doc2"}, {"num": 18, "text": "在 ERP 系統導入中，對於專案小組成員的教育訓練是非常重要的一環，足以影響整個專案導入的成效。教育訓練的工作可分為幾個方面，下列何者的重點在於教導最新的經營管理觀念？", "type": "single", "options": ["系統功能", "企業流程", "專案管理", "時程掌控"], "correct": [1], "source": "doc2"}, {"num": 19, "text": "ERP 導入的策略通常可分為三種，包含逐步式（Step by Step）、大躍進式（Big-Bang）與複製式（Roll-Out）。下列何者不是大躍進式（Big-Bang）的優點？", "type": "single", "options": ["人力資源所需較少", "縮短整個專案的時間", "整合後的功效可馬上顯現", "專案成員的衝勁與動機比較高"], "correct": [0], "source": "doc2"}, {"num": 20, "text": "ERP 導入後期效益良莠與否，往往與其 BPR 的舉措息息相關。而在 ERP 的導入期程中，通常妥善決策並確認企業流程的期程應於哪個期程？", "type": "single", "options": ["專案準備期", "系統上線規劃期", "企業藍圖規劃期", "系統建置期"], "correct": [2], "source": "doc2"}, {"num": 21, "text": "下列哪些是 ERP 系統導入的成功關鍵因素？(複選)", "type": "multi", "options": ["專職的專案成員", "有效的變革管理", "落實教育訓練", "高階主管的參與和支持"], "correct": [0, 1, 2, 3], "source": "doc2"}, {"num": 22, "text": "請根據上課所說的MRP回答問題。若客戶訂單需求量為成品F 10000個, 每一個F由2個A與3個B所組成, 如果倉庫內有可用的成品F庫存2000、原料A庫存3000、原料B庫存5000, 則物料需求規劃中尚未扣除庫存的原料A的原始需求數量為：", "type": "single", "options": ["8000", "16000", "24000", "32000"], "correct": [1], "source": "doc2"}, {"num": 23, "text": "一個完整的 ERP 評選過程，至少需要包含下述哪些步驟？1. 建立企業願景與策略；2. 建立 ERP 系統導入的目標；3. 收集 ERP 供應商相關資料；4. 評選 ERP 系統供應商；5. 評選 ERP 導入顧問公司；6. 簽訂導入合約", "type": "single", "options": ["12345", "123456", "2345", "1345"], "correct": [1], "source": "doc2"}, {"num": 24, "text": "所有具經驗的企業都同意，在 ERP 建置工作結束系統正式營運時，真正的挑戰才正要開始。除了維持系統的正常運作之外，還有哪些主要工作需要持續進行？(複選)", "type": "multi", "options": ["使用者意見的收集", "系統維護與調整", "系統績效的評量", "系統改進與擴充計畫"], "correct": [0, 1, 2, 3], "source": "doc2"}, {"num": 25, "text": "下列哪個工作並不適合於系統設計與開發（系統建置）期間進行？", "type": "single", "options": ["系統流程確認與差異比對", "執行系統整合測試", "建立授權架構與權限管理機制", "一般使用者操作教材開發／撰寫"], "correct": [0], "source": "doc2"}, {"num": 26, "text": "假設 AB&B 公司已有部分組織有不錯執行效益的 MIS 系統正在使用，而該公司通常在網路及行動的連通上亦算是業界翹楚。公司內部的組織因極度網路化，是以公司的組織非以地域性為主，而是藉由網路的銜接，某一部門的人員可散居世界各地卻透過網路共同協同工作。此時 AB&B 公司希望在既有資訊發展的基礎上，導入 ERP系統，此時您將會建議使用何種導入方式？", "type": "single", "options": ["全面性導入（Big Bang）", "漸進式導入的逐廠區方式（Site by site， Roll-out）", "漸進式導入的逐功能／模組方式（Step by step）", "先期式導入（pilot-study）模式"], "correct": [2], "source": "doc2"}, {"num": 27, "text": "導入 ERP 常會產生兩項成本，一是無法量化但卻難以避免的人為因素成本，另一則是能估算出來的可量化成本。在可量化成本中，有兩者較密切的與使用者可能的抗拒（人的抗拒）有關，請問是下列哪兩項？(複選)", "type": "multi", "options": ["軟硬體成本", "訓練與變革管理成本", "企業流程再造成本", "數據資料轉換成本"], "correct": [1, 2], "source": "doc2"}, {"num": 28, "text": "很多 ERP 軟體供應商建議客戶安裝三套 ERP 系統，分別為下列哪些？(複選)", "type": "multi", "options": ["開發用系統", "測試用系統", "正式運作系統", "教育訓練用系統"], "correct": [0, 1, 2], "source": "doc2"}, {"num": 29, "text": "一般來說，ERP 系統開發生命週期可分為幾個階段來進行，包含系統的規劃、分析、設計、建構與運作維護，下列何者不是國內 ERP供應商鼎新公司的導入步驟？", "type": "single", "options": ["專案計畫", "系統精進", "上線準備", "制度規劃"], "correct": [1], "source": "doc2"}, {"num": 30, "text": "下列專案風險管理的步驟，請問正確的順序為下列何者？A. 風險認定、B. 風險評估、C. 風險排序、D. 風險規劃、E. 風險解決、F. 風險追蹤", "type": "single", "options": ["ABCDEF", "ADBCEF", "CBAEDF", "BADFEC"], "correct": [0], "source": "doc2"}, {"num": 31, "text": "ERP 經常伴隨著企業流程再造（BPR）議題，二者之間較合理的關係為下列何者？", "type": "single", "options": ["ERP 與 BPR 同時進行", "先 ERP 再 BPR", "先 BPR 再 ERP", "BPR 與 ERP 無關"], "correct": [2], "source": "doc2"}, {"num": 32, "text": "下列哪一種設計包含了模組功能、資料模式和使用者介面等內容，如資料流程圖（DFD）、實體關聯模型（ER-Model）等？", "type": "single", "options": ["細部設計", "整合性設計", "實體設計", "概念性設計"], "correct": [0], "source": "doc2"}, {"num": 33, "text": "ERP 系統的導入策略可以分為三種：逐步式（Step by Step）、大躍進式（Big-Bang）和複製式（Roll-Out），其中容易忽略各據點特有流程的為下列何者？", "type": "single", "options": ["逐步式（Step by Step）", "大躍進式（Big-Bang）", "複製式（Roll-Out）", "三者都可以"], "correct": [2], "source": "doc2"}, {"num": 34, "text": "ERP 系統導入的專案控管是一項連貫所有階段的重要工作，而專案控管的步驟可分為訂定目標、離差測量、修正與檢討及學習提昇等四個階段。下列哪些是屬於離差測量階段很好的輔助工具？(複選)", "type": "multi", "options": ["意見回饋", "定期開會", "加強學習", "導入排程計劃"], "correct": [1, 3], "source": "doc2"}, {"num": 35, "text": "系統設計是系統導入的重點工作。在細部設計部分，下列哪些是常使用的工具？(複選)", "type": "multi", "options": ["PERT（Program Evaluation and Review Technique）", "IDEF（ICAM Definition Languages）", "ARIS（Architecture of Integrated InformationSystem）", "OOA／OOD（Object-Oriented Analysis & Design）"], "correct": [1, 2, 3], "source": "doc2"}, {"num": 36, "text": "下列哪一個階段的主要工作是為整個 ERP 系統建置專案擬定一個詳細而完整的計畫，並提出包含所有各階段過程的計畫書？", "type": "single", "options": ["系統建構", "系統轉移", "系統規劃", "系統設計"], "correct": [2], "source": "doc2"}, {"num": 37, "text": "ERP 系統建置的大致程序主要可以包含附圖中的五項，請選出其正確順序者？（請參閱附圖作答）", "type": "single", "options": ["24531", "21435", "23415", "24135"], "correct": [3], "source": "doc2"}, {"num": 38, "text": "在 ERP 系統導入流程中成立專案組織是在哪一個階段的工作？", "type": "single", "options": ["企業藍圖規劃", "專案準備", "系統建置", "系統上線規劃"], "correct": [1], "source": "doc2"}, {"num": 39, "text": "下列哪一個階段的主要工作是將新系統安裝在組織的實際作業環境中，並在實際作業的環境上進行接收測試（accept test）？", "type": "single", "options": ["系統建構", "正式上線運作", "系統轉移", "系統設計"], "correct": [2], "source": "doc2"}, {"num": 40, "text": "請就下列傳統 ERP 系統常見建置程序排定其合適的順序？（1）建立報表（2）定義資料表格及作業流程（3）測試與轉換（4）建構整體資訊作業環境", "type": "single", "options": ["4213", "2431", "2413", "4231"], "correct": [0], "source": "doc2"}, {"num": 41, "text": "下列何者非導入 ERP 在「營運作業」的績效？", "type": "single", "options": ["決策時間縮短", "決策品質提升", "跨部門分享資訊", "員工生產力提高"], "correct": [2], "source": "doc2"}, {"num": 42, "text": "請根據上課所說的MRP回答問題。若客戶訂單需求量為成品F 10000個, 每一個F由2個A與3個B所組成, 如果倉庫內有可用的成品F庫存2000、原料A庫存3000、原料B庫存5000, 則原料A的實際採購數量為：", "type": "single", "options": ["8000", "16000", "13000", "11000"], "correct": [2], "source": "doc2"}, {"num": 43, "text": "ERP 系統的導入可以分為三個階段，以下導入順序何者正確？", "type": "single", "options": ["系統評選決策 → 運作及持續改進 → 系統建置過程", "系統建置過程 → 系統評選決策 → 運作及持續改進", "運作及持續改進 → 系統建置過程 → 系統評選決策", "系統評選決策 → 系統建置過程 → 運作及持續改進"], "correct": [3], "source": "doc2"}, {"num": 44, "text": "大多數的 ERP 供應商都為了自己的產品發展出建置的方法論（methodology）或建置程序，並發展出一些工具，作為建置的指導與輔助。下列哪一家公司發展出一套線上輔助工具 AIM（Advance Implementation Method）來協助企業導入 ERP 系統？", "type": "single", "options": ["Oracle", "SAP", "IBM", "鼎新"], "correct": [0], "source": "doc2"}, {"num": 45, "text": "下列敘述何者錯誤？", "type": "single", "options": ["當需求分析的結果顯示企業現行作業與 ERP 系統供應商所提供的系統作業流程不同時，有兩個作法，分別是客製化開發部分流程與調整企業現行流程", "企業流程再造（BPR）是一個很複雜且工程浩大的工作。企業推動 BPR 時，不需要額外的人力與成本", "ERP 系統供應商所提供的系統可透過模組選擇，讓系統本身具有一定的應用彈性", "要進行客製化時，應該以外掛模組的方式來進行"], "correct": [1], "source": "doc2"}, {"num": 46, "text": "ERP 系統的導入策略可以分為三種：逐步式（Step by Step）、大躍進式（Big-Bang）和複製式（Roll-Out），其中會在新舊模組的銜接耗費較多時間與成本的為下列何者？", "type": "single", "options": ["逐步式（Step by Step）", "大躍進式（Big-Bang）", "複製式（Roll-Out）", "三者都可以"], "correct": [0], "source": "doc2"}, {"num": 47, "text": "在 ERP 系統導入流程中企業藍圖規劃的重點在於下列何者？", "type": "single", "options": ["確認企業經營策略", "確認目前營運模式與組織架構", "確認過去營運模式與組織架構", "確認未來營運模式與組織架構"], "correct": [3], "source": "doc2"}, {"num": 48, "text": "一般 ERP 供應商所提供的系統都具備一套完整的功能，而且透過模組選擇與參數設定的方式，本身已具有一定的應用彈性。除非企業有非常特殊的作業程序，並與企業的核心競爭力有關，一般認為儘量避免何種方式較為合宜？", "type": "single", "options": ["資訊化", "正規化", "客製化", "模組化"], "correct": [2], "source": "doc2"}, {"num": 49, "text": "下列有關 ERP 系統專案導入執行團隊人員的職責敘述何者錯誤？", "type": "single", "options": ["專案委員會必須是具有統籌決策權責的人員所組成，通常為總經理及各事業部主管", "專案經理應該由通盤瞭解公司作業需求且具有決策能力的人來擔任", "模組負責人通常由處級或理級主管擔任", "End User 負責該模組上線的成敗"], "correct": [3], "source": "doc2"}, {"num": 50, "text": "請根據上課所說的MRP回答問題。若客戶訂單需求量為成品F 10000個, 每一個F由2個A與3個B所組成, 如果倉庫內有可用的成品F庫存2000、原料A庫存3000、原料B庫存5000, 則原料B的實際採購數量為：", "type": "single", "options": ["8000", "24000", "19000", "3000"], "correct": [2], "source": "doc2"}, {"num": 51, "text": "下列就 ASAP 導入期程，請排出其正確的順序？（1）專案準備（2）企業藍圖規劃（3）初始評估（4）系統上線規劃（5）系統建置（6）持續改善（7）系統上線", "type": "single", "options": ["3125476", "1234567", "3125467", "1235467"], "correct": [0], "source": "doc2"}, {"num": 52, "text": "ERP 系統功能模組細部參數的調校、庫存安全存量或前置時間的細部調整，應該可以配合應用顧問與技術顧問在以下哪個期程進行？", "type": "single", "options": ["企業藍圖規劃期", "系統建置期", "系統上線期", "持續改善期"], "correct": [3], "source": "doc2"}, {"num": 53, "text": "如果經濟訂購量(EOQ)是100 則平均庫存量是多少？", "type": "single", "options": ["100", "50", "25", "10"], "correct": [1], "source": "doc2"}, {"num": 54, "text": "在評選 ERP 系統時，對系統彈性的要求可以透過哪些方式來達成？(複選)", "type": "multi", "options": ["透過模組選擇", "透過參數設定", "透過客製化程式", "透過維護合約"], "correct": [0, 1, 2], "source": "doc2"}, {"num": 55, "text": "一個企業之 ERP 系統導入案會歷經些許階段，有些導入案最終失敗，有些則是成功，以下哪些是導入案的成功關鍵因素？(複選)", "type": "multi", "options": ["管理階層對專案的參與和支持", "確實規劃資料轉換", "繁複的專案組織", "簡單、清楚而且可測量的目標"], "correct": [0, 1, 3], "source": "doc2"}, {"num": 56, "text": "請根據上課所說的MRP回答問題。若客戶訂單需求量為成品F 10000個, 每一個F由2個A與3個B所組成, 如果倉庫內有可用的成品F庫存2000、原料A庫存3000、原料B庫存5000, 則主生產排程的生產數量為：", "type": "single", "options": ["10000", "8000", "7000", "5000"], "correct": [1], "source": "doc2"}, {"num": 57, "text": "在評選 ERP 系統時需要將 ERP 系統供應商長期競爭力納入考量因素是因為下列何者？", "type": "single", "options": ["將 ERP 系統選購視為一次性的採購", "將 ERP 系統選購視為一個建立長期經營夥伴關係", "可以取得具成本優勢的系統", "可以取得功能較符合企業需求的系統"], "correct": [1], "source": "doc2"}, {"num": 58, "text": "請根據上課所說的MRP回答問題。若客戶訂單需求量為成品F 10000個, 每一個F由2個A與3個B所組成, 如果倉庫內有可用的成品F庫存2000、原料A庫存3000、原料B庫存5000, 則物料需求規劃中尚未扣除庫存的原料B的原始需求數量為：", "type": "single", "options": ["8000", "16000", "24000", "32000"], "correct": [2], "source": "doc2"}, {"num": 59, "text": "關於 ERP 系統供應商的最後評選階段，以下敘述何者錯誤？", "type": "single", "options": ["評選組織人員時，可以資訊人員技術上的考量作為唯一依據，並應避免使用者需求凌駕資訊人員", "一般認為評選供應商最合理作法是：成立評選委員會廣納各方意見，然後用投票或共識決方式選出合格或理想供應商，再交由高階主管裁決", "評選階段最主要考慮的三件事是：評選的組織與人員、評選的方法或程序以及評選的標準", "評選供應商需要考慮的因素有許多，其中包括和企業作業流程相結合、考慮公司的遠景與策略等"], "correct": [0], "source": "doc2"}, {"num": 60, "text": "現今 ERP 導入常見的一個問題是企業面對瞬息萬變的市場現狀與客戶回應，往往需要快速調整其作業方式或部分 ERP 系統細節，此種狀況在早期 ERP 系統的規劃設計時反而不常見。試問此種發展，通常是基於考量系統需提升何種特質的原因？", "type": "single", "options": ["Flexibility（系統彈性，靈活性）", "Usability（優使性）", "Manageability（管理性）", "Scalability（規模彈性，規模可擴充性）"], "correct": [0], "source": "doc2"}, {"num": 61, "text": "不論國內或國外之 ERP 系統供應商，建置顧問的評選是十分重要，以下何者不是評選 ERP 建置顧問的主要考慮因素？", "type": "single", "options": ["導入企業不可更換指派的建置顧問", "對系統的熟悉程度", "對導入企業的相關產業了解程度", "是否同時要進行企業流程再造（BPR）"], "correct": [0], "source": "doc2"}];
+
+// ============ Source labels ============
+const SOURCE_LABELS = {
+  doc1: { name: '第一章·ERP 概論', short: 'doc1' },
+  doc2: { name: '第二章·導入策略', short: 'doc2' },
+  doc3: { name: '第三章·主要模組', short: 'doc3' },
+  doc4: { name: '第四章·BPR 與治理', short: 'doc4' },
+  doc5: { name: '第五章·ERP II 延伸', short: 'doc5' },
+};
+const HISTORY_KEY = 'erp_quiz_history_v1';
+const THEME_KEY = 'erp_quiz_theme';
+const LETTERS = ['a', 'b', 'c', 'd', 'e', 'f'];
+
+// ============ State ============
+let state = {
+  screen: 'home',
+  config: { mode: 'random', chapters: [], n: 20 },
+  pool: [],
+  idx: 0,
+  answers: [], // [{picked:[i], correct:bool, q: ref}]
+  startAt: 0,
+  endAt: 0,
+  feedback: false, // is current Q showing feedback
+};
+
+const $main = document.getElementById('main');
+
+// ============ Init ============
+function init() {
+  // Theme
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved) document.body.setAttribute('data-theme', saved);
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const cur = document.body.getAttribute('data-theme');
+    let next;
+    if (!cur) {
+      // currently following system; flip to opposite of system
+      const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      next = sysDark ? 'light' : 'dark';
+    } else {
+      next = cur === 'dark' ? 'light' : 'dark';
+    }
+    document.body.setAttribute('data-theme', next);
+    localStorage.setItem(THEME_KEY, next);
+  });
+
+  // Default chapters: any source we actually have
+  const present = [...new Set(QUESTIONS.map(q => q.source))];
+  state.config.chapters = present.slice();
+
+  renderHome();
+}
+
+// ============ Helpers ============
+function shuffle(a) {
+  const r = a.slice();
+  for (let i = r.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [r[i], r[j]] = [r[j], r[i]];
+  }
+  return r;
+}
+function arrEq(a, b) {
+  if (a.length !== b.length) return false;
+  const sa = a.slice().sort((x, y) => x - y);
+  const sb = b.slice().sort((x, y) => x - y);
+  return sa.every((v, i) => v === sb[i]);
+}
+function fmtTime(secs) {
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
+function fmtDate(ts) {
+  const d = new Date(ts);
+  const pad = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+  catch { return []; }
+}
+function saveHistory(rec) {
+  const h = getHistory();
+  h.unshift(rec);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(h.slice(0, 100)));
+}
+function clearHistory() {
+  if (confirm('確定要清除所有紀錄嗎?')) {
+    localStorage.removeItem(HISTORY_KEY);
+    renderHome();
+  }
+}
+function describeMode(cfg) {
+  if (cfg.mode === 'full') return '全部';
+  if (cfg.mode === 'random') return `隨機 ${cfg.n} 題`;
+  if (cfg.mode === 'chapter') {
+    const names = cfg.chapters.map(c => SOURCE_LABELS[c]?.short || c).join('+');
+    return `章節 ${names}`;
+  }
+  if (cfg.mode === 'wrong-retry') return '錯題重練';
+  return cfg.mode;
+}
+
+// ============ Home Screen ============
+function renderHome() {
+  state.screen = 'home';
+  state.feedback = false;
+  const counts = {};
+  QUESTIONS.forEach(q => counts[q.source] = (counts[q.source] || 0) + 1);
+  const total = QUESTIONS.length;
+  const multi = QUESTIONS.filter(q => q.type === 'multi').length;
+  const history = getHistory();
+
+  $main.innerHTML = `
+    <section class="home-hero fade-in">
+      <div class="home-eyebrow">ERP · 期末題庫</div>
+      <h1 class="home-title">把錯題<em>一個一個</em>磨掉</h1>
+      <p class="home-tag">收錄歷次小考的所有題目，可以依章節出題，也可以隨機抽題練手。每答一題立刻看正解，最後可重練錯題。</p>
+      <div class="home-stats">
+        <div class="stat-item">
+          <div class="stat-label">總題數</div>
+          <div class="stat-value num">${total}</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">複選題</div>
+          <div class="stat-value num">${multi}</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">已收錄章節</div>
+          <div class="stat-value num">${Object.keys(counts).length} / 5</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="modes">
+        <button class="mode-card" data-mode="random">
+          <span class="mode-card-num">01</span>
+          <span class="mode-card-title">隨機抽題</span>
+          <span class="mode-card-desc">指定題數，從整題庫隨機抽取，最快開始練習。</span>
+        </button>
+        <button class="mode-card" data-mode="chapter">
+          <span class="mode-card-num">02</span>
+          <span class="mode-card-title">依章節練</span>
+          <span class="mode-card-desc">選擇 doc1 ~ doc5，針對特定章節集中複習。</span>
+        </button>
+        <button class="mode-card" data-mode="full">
+          <span class="mode-card-num">03</span>
+          <span class="mode-card-title">完整測驗</span>
+          <span class="mode-card-desc">全題庫一次跑完，模擬大考前的最後總演練。</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="home-section">
+      <h2 class="section-title">
+        <span>歷次紀錄</span>
+        ${history.length ? `<button class="history-clear" id="clearHist">清除紀錄</button>` : ''}
+      </h2>
+      <div id="historyList"></div>
+    </section>
+  `;
+
+  // Mode card handlers
+  document.querySelectorAll('.mode-card').forEach(b => {
+    b.addEventListener('click', () => renderConfig(b.dataset.mode));
+  });
+
+  // History
+  renderHistoryList();
+  if (history.length) {
+    document.getElementById('clearHist').addEventListener('click', clearHistory);
+  }
+}
+
+function renderHistoryList() {
+  const wrap = document.getElementById('historyList');
+  const history = getHistory();
+  if (history.length === 0) {
+    wrap.innerHTML = `<div class="history-empty">還沒有任何紀錄。完成一輪測驗後會出現在這裡。</div>`;
+    return;
+  }
+  wrap.innerHTML = `<div class="history-list">${history.map(r => {
+    const pct = Math.round(r.score / r.total * 100);
+    const tier = pct >= 80 ? 'good' : pct >= 60 ? 'mid' : 'bad';
+    return `<div class="history-item">
+      <span class="history-date">${fmtDate(r.ts)}</span>
+      <span class="history-mode">${r.mode}</span>
+      <span class="history-pct">${fmtTime(r.duration)}</span>
+      <span class="history-score ${tier}">${r.score}/${r.total} <span class="history-pct">(${pct}%)</span></span>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// ============ Config Screen ============
+function renderConfig(mode) {
+  state.screen = 'config';
+  state.config.mode = mode;
+
+  const present = [...new Set(QUESTIONS.map(q => q.source))];
+  if (state.config.chapters.length === 0 || mode !== 'chapter') {
+    state.config.chapters = present.slice();
+  }
+
+  const counts = {};
+  QUESTIONS.forEach(q => counts[q.source] = (counts[q.source] || 0) + 1);
+  const total = QUESTIONS.length;
+
+  let body = '';
+  if (mode === 'random') {
+    body = `
+      <div class="field">
+        <div class="field-label"><span>抽幾題?</span><span class="field-aux">最大 ${total}</span></div>
+        <input id="numInput" class="num-input" type="number" min="1" max="${total}" value="${Math.min(state.config.n, total)}">
+        <div class="toggle-row" style="margin-top:12px">
+          ${[10, 20, 30, 50].filter(n => n <= total).map(n =>
+            `<button class="toggle" data-n="${n}">${n} 題</button>`
+          ).join('')}
+        </div>
+      </div>`;
+  } else if (mode === 'chapter') {
+    body = `
+      <div class="field">
+        <div class="field-label"><span>選擇章節 (可多選)</span><span class="field-aux" id="chapterAux">— 題</span></div>
+        <div class="chapter-grid">
+          ${present.map(s => `
+            <button class="chapter-chip" data-src="${s}">
+              <span class="chapter-chip-name">${SOURCE_LABELS[s]?.name || s}</span>
+              <span class="chapter-chip-count num">${counts[s]} 題</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">
+          <span>要全部出，還是隨機抽?</span>
+        </div>
+        <div class="toggle-row">
+          <button class="toggle" data-mode-sub="all">全部出</button>
+          <button class="toggle" data-mode-sub="rand">隨機抽 N 題</button>
+        </div>
+        <div id="chapterRand" class="hidden" style="margin-top:12px">
+          <input id="chapterN" class="num-input" type="number" min="1" value="20">
+        </div>
+      </div>`;
+  } else if (mode === 'full') {
+    body = `
+      <div class="field">
+        <p style="color:var(--ink-2)">會把目前題庫的全部 <strong class="num">${total}</strong> 題排成一輪，順序隨機。</p>
+      </div>`;
+  }
+
+  $main.innerHTML = `
+    <div class="fade-in">
+      <button class="config-back" id="back">← 回主頁</button>
+      <h1 class="config-title">${
+        mode === 'random' ? '隨機抽題' : mode === 'chapter' ? '依章節練' : '完整測驗'
+      }</h1>
+      <p class="config-desc">${
+        mode === 'random' ? '從題庫裡亂數挑出指定題數，每次都不一樣。' :
+        mode === 'chapter' ? '挑章節集中練，先把熟的踢掉、把不熟的鎖定。' :
+        '完整跑一輪，看看自己整體掌握度。'
+      }</p>
+      ${body}
+      <div class="btn-row" style="margin-top:32px">
+        <button class="btn" id="startBtn">開始測驗</button>
+        <button class="btn btn-ghost" id="back2">取消</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('back').addEventListener('click', renderHome);
+  document.getElementById('back2').addEventListener('click', renderHome);
+  document.getElementById('startBtn').addEventListener('click', startQuiz);
+
+  if (mode === 'random') {
+    const inp = document.getElementById('numInput');
+    inp.addEventListener('input', () => {
+      const v = parseInt(inp.value, 10);
+      if (!isNaN(v)) state.config.n = Math.max(1, Math.min(total, v));
+    });
+    document.querySelectorAll('.toggle[data-n]').forEach(t => {
+      t.addEventListener('click', () => {
+        inp.value = t.dataset.n;
+        state.config.n = parseInt(t.dataset.n, 10);
+      });
+    });
+  }
+  if (mode === 'chapter') {
+    const updateChips = () => {
+      let n = 0;
+      document.querySelectorAll('.chapter-chip').forEach(c => {
+        if (state.config.chapters.includes(c.dataset.src)) {
+          c.classList.add('active');
+          n += parseInt(c.querySelector('.chapter-chip-count').textContent, 10) || 0;
+        } else c.classList.remove('active');
+      });
+      document.getElementById('chapterAux').textContent = `共 ${n} 題`;
+    };
+    document.querySelectorAll('.chapter-chip').forEach(c => {
+      c.addEventListener('click', () => {
+        const s = c.dataset.src;
+        const i = state.config.chapters.indexOf(s);
+        if (i >= 0) state.config.chapters.splice(i, 1);
+        else state.config.chapters.push(s);
+        updateChips();
+      });
+    });
+    updateChips();
+
+    state.config.subMode = 'all';
+    const subToggles = document.querySelectorAll('.toggle[data-mode-sub]');
+    const updateSub = () => {
+      subToggles.forEach(t => t.classList.toggle('active', t.dataset.modeSub === state.config.subMode));
+      document.getElementById('chapterRand').classList.toggle('hidden', state.config.subMode !== 'rand');
+    };
+    subToggles.forEach(t => {
+      t.addEventListener('click', () => {
+        state.config.subMode = t.dataset.modeSub;
+        updateSub();
+      });
+    });
+    updateSub();
+  }
+}
+
+// ============ Start Quiz ============
+function startQuiz() {
+  let pool = [];
+  const cfg = state.config;
+  if (cfg.mode === 'full') {
+    pool = QUESTIONS.slice();
+  } else if (cfg.mode === 'random') {
+    pool = shuffle(QUESTIONS).slice(0, cfg.n);
+  } else if (cfg.mode === 'chapter') {
+    if (cfg.chapters.length === 0) {
+      alert('請至少選一個章節');
+      return;
+    }
+    pool = QUESTIONS.filter(q => cfg.chapters.includes(q.source));
+    if (cfg.subMode === 'rand') {
+      const n = parseInt(document.getElementById('chapterN').value, 10) || 20;
+      pool = shuffle(pool).slice(0, n);
+    } else {
+      pool = shuffle(pool); // randomize order even on "all"
+    }
+  }
+  if (pool.length === 0) {
+    alert('題目為空');
+    return;
+  }
+  state.pool = pool;
+  state.idx = 0;
+  state.answers = [];
+  state.startAt = Date.now();
+  state.feedback = false;
+  renderQuestion();
+}
+
+// ============ Quiz Screen ============
+let pickState = []; // current selection (array of indices)
+
+function renderQuestion() {
+  state.screen = 'quiz';
+  state.feedback = false;
+  pickState = [];
+  const q = state.pool[state.idx];
+  const total = state.pool.length;
+  const pct = (state.idx / total) * 100;
+
+  const tagMulti = q.type === 'multi'
+    ? `<span class="qmeta-tag multi">複選</span>`
+    : `<span class="qmeta-tag">單選</span>`;
+  const tagSrc = `<span class="qmeta-tag">${SOURCE_LABELS[q.source]?.short || q.source}</span>`;
+  const tagOrig = q.num ? `<span class="qmeta-tag">原 #${q.num}</span>` : '';
+
+  $main.innerHTML = `
+    <div class="progress-wrap fade-in">
+      <div class="progress-meta">
+        <span>${state.idx + 1} / ${total}</span>
+        <span>${describeMode(state.config)}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="qcard fade-in">
+      <div class="qmeta">${tagMulti}${tagSrc}${tagOrig}</div>
+      <p class="qtext">${escapeHtml(q.text)}</p>
+      <div class="options" id="options">
+        ${q.options.map((o, i) => `
+          <button class="opt" data-i="${i}">
+            <span class="opt-letter">${LETTERS[i]}.</span>
+            <span class="opt-text">${escapeHtml(o)}</span>
+            <span class="opt-icon"></span>
+          </button>
+        `).join('')}
+      </div>
+      <div id="feedback"></div>
+      <div class="qactions">
+        <span class="qactions-left" id="qhint">${q.type === 'multi' ? '可以複選' : '單選'}</span>
+        <button class="btn" id="primaryBtn" disabled>確認</button>
+      </div>
+    </div>
+  `;
+
+  const optEls = document.querySelectorAll('.opt');
+  optEls.forEach(el => {
+    el.addEventListener('click', () => {
+      if (state.feedback) return;
+      const i = parseInt(el.dataset.i, 10);
+      if (q.type === 'single') {
+        pickState = [i];
+        optEls.forEach(e => e.classList.toggle('selected', parseInt(e.dataset.i, 10) === i));
+      } else {
+        const idx = pickState.indexOf(i);
+        if (idx >= 0) pickState.splice(idx, 1);
+        else pickState.push(i);
+        el.classList.toggle('selected');
+      }
+      document.getElementById('primaryBtn').disabled = pickState.length === 0;
+    });
+  });
+  document.getElementById('primaryBtn').addEventListener('click', onPrimary);
+}
+
+function onPrimary() {
+  if (!state.feedback) {
+    submitAnswer();
+  } else {
+    advance();
+  }
+}
+
+function submitAnswer() {
+  const q = state.pool[state.idx];
+  const correct = arrEq(pickState, q.correct);
+  state.answers.push({ picked: pickState.slice(), correct, q });
+  state.feedback = true;
+
+  // Update option styles
+  document.querySelectorAll('.opt').forEach(el => {
+    const i = parseInt(el.dataset.i, 10);
+    const picked = pickState.includes(i);
+    const isCorrect = q.correct.includes(i);
+    el.classList.remove('selected');
+    el.setAttribute('disabled', '');
+    el.querySelector('.opt-icon').textContent = '';
+    if (picked && isCorrect) {
+      el.classList.add('correct');
+      el.querySelector('.opt-icon').textContent = '✓';
+    } else if (picked && !isCorrect) {
+      el.classList.add('wrong');
+      el.querySelector('.opt-icon').textContent = '✗';
+    } else if (!picked && isCorrect) {
+      el.classList.add('correct-missed');
+      el.querySelector('.opt-icon').textContent = '✓';
+    }
+  });
+
+  // Feedback box
+  const fb = document.getElementById('feedback');
+  if (correct) {
+    fb.innerHTML = `<div class="feedback right"><strong>答對。</strong>`+
+      `${q.type === 'multi' ? `正解 ${q.correct.map(i => LETTERS[i]).join('、')}` : `正解 ${LETTERS[q.correct[0]]}`}</div>`;
+  } else {
+    fb.innerHTML = `<div class="feedback wrong"><strong>答錯。</strong>` +
+      `正解 ${q.correct.map(i => LETTERS[i]).join('、')}` +
+      (q.type === 'multi' ? `（複選需全部選對）` : '') +
+      `</div>`;
+  }
+
+  document.getElementById('qhint').textContent = correct ? '繼續下一題' : '看清楚正解再繼續';
+  const btn = document.getElementById('primaryBtn');
+  btn.disabled = false;
+  btn.textContent = state.idx + 1 < state.pool.length ? '下一題 →' : '看結果';
+}
+
+function advance() {
+  state.idx++;
+  if (state.idx >= state.pool.length) {
+    endQuiz();
+  } else {
+    renderQuestion();
+  }
+}
+
+// ============ Result Screen ============
+function endQuiz() {
+  state.screen = 'result';
+  state.endAt = Date.now();
+  const dur = Math.round((state.endAt - state.startAt) / 1000);
+  const total = state.pool.length;
+  const correct = state.answers.filter(a => a.correct).length;
+  const pct = Math.round(correct / total * 100);
+
+  // Save history
+  saveHistory({
+    ts: state.endAt,
+    score: correct,
+    total,
+    duration: dur,
+    mode: describeMode(state.config),
+  });
+
+  const wrong = state.answers.filter(a => !a.correct);
+  const tier = pct >= 80 ? 'good' : pct >= 60 ? 'mid' : 'bad';
+  const tierMsg = pct === 100 ? '滿分。' : pct >= 80 ? '不錯。' : pct >= 60 ? '還可以。' : '需要再練。';
+
+  $main.innerHTML = `
+    <div class="fade-in">
+      <div class="result-hero">
+        <div class="result-eyebrow">${tierMsg}</div>
+        <div class="result-score ${tier === 'good' ? 'good' : ''}">${pct}<span style="font-size:.5em;color:var(--ink-3)">%</span></div>
+        <div class="result-fraction">${correct} / ${total}</div>
+        <div class="result-meta">
+          <div class="result-meta-item">
+            <div class="result-meta-label">用時</div>
+            <div class="result-meta-value num">${fmtTime(dur)}</div>
+          </div>
+          <div class="result-meta-item">
+            <div class="result-meta-label">答對</div>
+            <div class="result-meta-value num">${correct}</div>
+          </div>
+          <div class="result-meta-item">
+            <div class="result-meta-label">答錯</div>
+            <div class="result-meta-value num">${wrong.length}</div>
+          </div>
+          <div class="result-meta-item">
+            <div class="result-meta-label">範圍</div>
+            <div class="result-meta-value">${describeMode(state.config)}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        ${wrong.length ? `<button class="btn" id="retryWrong">錯題重練 (${wrong.length} 題)</button>` : ''}
+        <button class="btn btn-ghost" id="redo">再做一次</button>
+        <button class="btn btn-ghost" id="goHome">回主頁</button>
+      </div>
+
+      ${wrong.length ? `
+        <div class="review-section">
+          <h2 class="section-title">
+            <span>錯題回顧</span>
+            <span class="section-title-aux">${wrong.length} items</span>
+          </h2>
+          ${wrong.map((a, i) => `
+            <div class="review-item">
+              <div class="review-meta">
+                <span>#${i + 1}</span>
+                <span>${SOURCE_LABELS[a.q.source]?.short || a.q.source}</span>
+                <span>${a.q.type === 'multi' ? '複選' : '單選'}</span>
+                ${a.q.num ? `<span>原 #${a.q.num}</span>` : ''}
+              </div>
+              <div class="review-q">${escapeHtml(a.q.text)}</div>
+              ${a.q.options.map((o, j) => {
+                const picked = a.picked.includes(j);
+                const isCorrect = a.q.correct.includes(j);
+                let css = '';
+                let icon = '';
+                if (picked && !isCorrect) { css = 'wrong'; icon = '✗'; }
+                else if (isCorrect) { css = picked ? 'correct' : 'correct-missed'; icon = '✓'; }
+                else { css = ''; icon = ''; }
+                return `<div class="opt ${css}" disabled style="cursor:default">
+                  <span class="opt-letter">${LETTERS[j]}.</span>
+                  <span class="opt-text">${escapeHtml(o)}</span>
+                  <span class="opt-icon">${icon}</span>
+                </div>`;
+              }).join('')}
+            </div>
+          `).join('')}
+        </div>
+      ` : `
+        <div class="review-section">
+          <div class="history-empty" style="border-color:var(--accent);color:var(--accent)">全對。沒什麼好回顧的，繼續下一輪。</div>
+        </div>
+      `}
+    </div>
+  `;
+
+  if (wrong.length) {
+    document.getElementById('retryWrong').addEventListener('click', () => {
+      state.pool = wrong.map(a => a.q);
+      state.idx = 0;
+      state.answers = [];
+      state.startAt = Date.now();
+      state.feedback = false;
+      // mark mode for display only
+      state.config = { ...state.config, mode: 'wrong-retry' };
+      renderQuestion();
+    });
+  }
+  document.getElementById('redo').addEventListener('click', startQuiz);
+  document.getElementById('goHome').addEventListener('click', renderHome);
+}
+
+// ============ utils ============
+function escapeHtml(s) {
+  return String(s)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+// keyboard shortcut: Enter to advance after feedback
+document.addEventListener('keydown', e => {
+  if (state.screen === 'quiz' && e.key === 'Enter') {
+    const btn = document.getElementById('primaryBtn');
+    if (btn && !btn.disabled) btn.click();
+  }
+});
+
+init();
+</script>
+</body>
+</html>
